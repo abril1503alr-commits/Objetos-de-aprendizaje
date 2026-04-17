@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mapas Interactivos: Corea y Vietnam</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f4f0;
+      color: #1a1a2e;
+      padding: 24px 16px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.45rem;
+      margin-bottom: 6px;
+      color: #2c2c2c;
+    }
+    .intro {
+      text-align: center;
+      font-size: 0.88rem;
+      color: #666;
+      margin-bottom: 36px;
+    }
+    .map-section {
+      max-width: 700px;
+      margin: 0 auto 52px auto;
+    }
+    .map-section h2 {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      padding-left: 10px;
+      border-left: 4px solid #8b1a1a;
+      color: #2c2c2c;
+    }
+
+    /* ── Contenedor del mapa ── */
+    .map-container {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      border-radius: 6px;
+      overflow: visible;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.18);
+    }
+    .map-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+    }
+
+    /* ── Hotspot ── */
+    .hotspot {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      background: rgba(180, 30, 30, 0.82);
+      border: 2.5px solid #fff;
+      border-radius: 50%;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s, background 0.18s;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: #fff;
+      user-select: none;
+    }
+    .hotspot:hover, .hotspot.active {
+      transform: translate(-50%, -50%) scale(1.4);
+      background: #c0392b;
+    }
+    .hotspot::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 2px solid rgba(180,30,30,0.55);
+      transform: translate(-50%,-50%);
+      animation: pulse 2s ease-out infinite;
+    }
+    @keyframes pulse {
+      0%   { transform: translate(-50%,-50%) scale(1); opacity:0.75; }
+      100% { transform: translate(-50%,-50%) scale(2.6); opacity:0; }
+    }
+
+    /* ── Tooltip ── */
+    .tooltip {
+      display: none;
+      position: absolute;
+      z-index: 300;
+      background: #1e1e2e;
+      color: #f0f0f0;
+      padding: 11px 13px;
+      border-radius: 8px;
+      width: 230px;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.35);
+      pointer-events: none;
+      border-top: 3px solid #c0392b;
+    }
+    .tooltip.visible { display: block; }
+    .tooltip h3 {
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+      color: #e8a090;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Instrucción ── */
+    .hint {
+      margin-top: 9px;
+      font-size: 0.78rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .hint-dot {
+      width: 11px; height: 11px;
+      background: #8b1a1a;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Indochina y el Sudeste Asiático</h1>
+<p class="intro">Pasa el cursor sobre los marcadores rojos del mapa para conocer cada evento. Haz <strong>clic</strong> para fijar la descripción.</p>
+
+<!-- ═══════════════════════════════════════════
+     MAPA 1: GUERRA DE COREA
+     Fuente: Daniel R. Brower, "Historia del mundo contemporáneo 1900-2001"
+════════════════════════════════════════════ -->
+<div class="map-section">
+  <h2>🗺 La Guerra de Corea</h2>
+  <div class="map-container" id="map-corea">
+
+    <img src="mapa_corea2_4k_1.png"
+         alt="Mapa de la Guerra de Corea"
+         id="img-corea" />
+
+    <!-- ① Paralelo 38 – frontera por decisión militar, agosto 1953 -->
+    <div class="hotspot" style="left:87%; top:44%;"
+         data-title="① Paralelo 38 — Frontera por decisión militar (agosto 1953)"
+         data-desc="El paralelo 38 fue reafirmado como frontera tras el armisticio. Aunque las fuerzas de la ONU habían superado esa línea durante su avance, la guerra terminó restableciendo prácticamente la misma división previa al conflicto.">
+      1
+    </div>
+
+    <!-- ② Invasión de los comunistas norcoreanos, 25 de junio de 1950 -->
+    <div class="hotspot" style="left:86%; top:53%;"
+         data-title="② Invasión norcoreana (25 de junio de 1950)"
+         data-desc="El 25 de junio de 1950, el ejército norcoreano cruzó el paralelo 38 en un ataque masivo. Las flechas del mapa muestran su rápido avance hacia el sur, capturando Seúl en apenas tres días y empujando a las fuerzas surcoreanas hasta el perímetro de Pusan.">
+      2
+    </div>
+
+    <!-- ③ Mayor avance de los norcoreanos, julio-septiembre 1950 -->
+    <div class="hotspot" style="left:86%; top:67%;"
+         data-title="③ Mayor avance norcoreano (julio – septiembre 1950)"
+         data-desc="Entre julio y septiembre de 1950, las fuerzas norcoreanas avanzaron hasta confinar a las tropas aliadas en el pequeño Perímetro de Pusan, en el extremo sureste de la península. Fue el punto de máxima presión sobre las fuerzas de la ONU antes del contraataque.">
+      3
+    </div>
+
+    <!-- ④ Contraataque ONU – Desembarco en Inchon, 15 de septiembre de 1950 -->
+    <div class="hotspot" style="left:9%; top:54%;"
+         data-title="④ Desembarco en Inchon (15 de septiembre de 1950)"
+         data-desc="El general Douglas MacArthur lideró un audaz desembarco anfibio en Inchon, a espaldas de las líneas norcoreanas. La operación cortó sus rutas de suministro y permitió recuperar Seúl en pocas semanas, revirtiendo el curso de la guerra.">
+      4
+    </div>
+
+    <!-- ⑤ Avance de las Naciones Unidas, 26 de octubre de 1950 -->
+    <div class="hotspot" style="left:79%; top:31%;"
+         data-title="⑤ Avance de la ONU (26 de octubre de 1950)"
+         data-desc="Tras el desembarco en Inchon, las fuerzas de la ONU avanzaron rápidamente hacia el norte, cruzando el paralelo 38 y acercándose al río Yalu, en la frontera con China. Este avance provocó la intervención china en el conflicto.">
+      5
+    </div>
+
+    <!-- ⑥ Avance ONU, 24 nov; ataque chino, 26 nov 1950 -->
+    <div class="hotspot" style="left:81%; top:10%;"
+         data-title="⑥ Avance de la ONU y contraataque chino (noviembre 1950)"
+         data-desc="El 24 de noviembre de 1950, las fuerzas de la ONU alcanzaron su punto más septentrional, cerca del río Yalu. Dos días después, el 26 de noviembre, China lanzó una contraofensiva masiva con cientos de miles de soldados, obligando a los aliados a una retirada precipitada.">
+      6
+    </div>
+
+    <!-- ⑦ Mayor avance de los comunistas chinos, enero de 1951 -->
+    <div class="hotspot" style="left:86%; top:61%;"
+         data-title="⑦ Mayor avance chino (enero de 1951)"
+         data-desc="Tras su entrada en el conflicto, las fuerzas chinas empujaron a las tropas aliadas nuevamente al sur del paralelo 38. En enero de 1951 recuperaron Seúl por segunda vez, generando una nueva crisis en el frente.">
+      7
+    </div>
+
+    <!-- ⑧ Línea del armisticio, 27 de junio de 1953 -->
+    <div class="hotspot" style="left:51%; top:40%;"
+         data-title="⑧ Línea del Armisticio (27 de junio de 1953)"
+         data-desc="El 27 de julio de 1953 se firmó el armisticio en Panmunjom, estableciendo una línea de cese al fuego muy próxima al paralelo 38. No se firmó un tratado de paz formal; técnicamente, las dos Coreas continúan en estado de guerra.">
+      8
+    </div>
+
+    <div class="tooltip" id="tooltip-corea">
+      <h3 id="tooltip-corea-title"></h3>
+      <p id="tooltip-corea-desc"></p>
+    </div>
+  </div>
+  <div class="hint">
+    <div class="hint-dot"></div>
+    Pasa el cursor o haz clic sobre cada marcador numerado para ver su descripción.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MAPA 2: GUERRA DE VIETNAM
+     Fuente: Daniel R. Brower, "Historia del mundo contemporáneo 1900-2001"
+════════════════════════════════════════════ -->
+<div class="map-section">
+  <h2>🗺 La Guerra de Vietnam</h2>
+  <div class="map-container" id="map-vietnam">
+
+    <img src="mapa_vietnam.png"
+         alt="Mapa de la Guerra de Vietnam"
+         id="img-vietnam" />
+
+    <!-- ① División en el paralelo 17, Acuerdos de Ginebra 1954 -->
+    <div class="hotspot" style="left:50%; top:28%;"
+         data-title="① División en el paralelo 17 (Acuerdos de Ginebra, 1954)"
+         data-desc="Los Acuerdos de Ginebra de 1954 dividieron Vietnam provisionalmente en el paralelo 17: al norte, la República Democrática de Vietnam (comunista) dirigida por Ho Chi Minh; al sur, la República de Vietnam apoyada por Estados Unidos. Se preveían elecciones unificadoras que nunca se celebraron.">
+      1
+    </div>
+
+    <!-- ② Ruta Ho Chi Minh -->
+    <div class="hotspot" style="left:35%; top:48%;"
+         data-title="② Ruta Ho Chi Minh"
+         data-desc="Red de senderos que atravesaba Laos y Camboya permitiendo al Norte de Vietnam abastecer a las fuerzas del Viet Cong en el sur. A pesar de intensos bombardeos estadounidenses, la ruta nunca fue cortada del todo y fue clave para el éxito comunista.">
+      2
+    </div>
+
+    <!-- ③ Ofensiva del Tet, enero-febrero 1968 -->
+    <div class="hotspot" style="left:62%; top:55%;"
+         data-title="③ Ofensiva del Tet (enero – febrero 1968)"
+         data-desc="Durante el año nuevo lunar (Tet), el Viet Cong y el Ejército norvietnamita lanzaron ataques simultáneos sobre más de 100 ciudades y poblaciones del sur, incluyendo la embajada de EE.UU. en Saigón. Aunque militarmente fue rechazada, la ofensiva destruyó la credibilidad del gobierno estadounidense y aceleró el retiro de tropas.">
+      3
+    </div>
+
+    <!-- ④ Bombardeos sobre el norte, 1965-1972 -->
+    <div class="hotspot" style="left:55%; top:15%;"
+         data-title="④ Bombardeos sobre Vietnam del Norte (1965 – 1972)"
+         data-desc="La operación Rolling Thunder (1965-1968) y las campañas posteriores lanzaron millones de toneladas de bombas sobre Vietnam del Norte con el objetivo de frenar el flujo de suministros al sur y forzar una negociación. A pesar de la devastación, el norte no cedió.">
+      4
+    </div>
+
+    <!-- ⑤ Golfo de Tonkín, agosto 1964 -->
+    <div class="hotspot" style="left:68%; top:22%;"
+         data-title="⑤ Incidente del Golfo de Tonkín (agosto 1964)"
+         data-desc="En agosto de 1964 el gobierno de EE.UU. reportó ataques norvietnamitas contra buques estadounidenses en el Golfo de Tonkín. El Congreso aprobó la resolución que autorizó al presidente Johnson a escalar militarmente sin declaración formal de guerra. Investigaciones posteriores cuestionaron la veracidad del segundo incidente.">
+      5
+    </div>
+
+    <!-- ⑥ Caída de Saigón, 30 de abril de 1975 -->
+    <div class="hotspot" style="left:60%; top:72%;"
+         data-title="⑥ Caída de Saigón (30 de abril de 1975)"
+         data-desc="El 30 de abril de 1975 las fuerzas norvietnamitas tomaron Saigón, capital del sur, poniendo fin a la guerra. Las imágenes de helicópteros evacuando personas desde la embajada estadounidense se convirtieron en símbolo del fracaso de la intervención de EE.UU. Vietnam se reunificó bajo el régimen comunista en 1976.">
+      6
+    </div>
+
+    <!-- ⑦ Invasión de Camboya, 1970 -->
+    <div class="hotspot" style="left:40%; top:65%;"
+         data-title="⑦ Invasión de Camboya (1970)"
+         data-desc="En 1970, EE.UU. y Vietnam del Sur invadieron Camboya para destruir bases del Viet Cong y cortar la Ruta Ho Chi Minh. La operación generó una crisis política interna en EE.UU. y contribuyó a la desestabilización de Camboya, allanando el camino para la posterior toma del poder por los Jemeres Rojos.">
+      7
+    </div>
+
+    <!-- ⑧ Acuerdos de París, enero 1973 -->
+    <div class="hotspot" style="left:22%; top:38%;"
+         data-title="⑧ Acuerdos de París (enero 1973)"
+         data-desc="En enero de 1973 se firmaron los Acuerdos de París que establecieron un alto al fuego y el retiro de las tropas estadounidenses de Vietnam. Sin embargo, los combates entre el norte y el sur continuaron hasta la caída de Saigón en 1975.">
+      8
+    </div>
+
+    <div class="tooltip" id="tooltip-vietnam">
+      <h3 id="tooltip-vietnam-title"></h3>
+      <p id="tooltip-vietnam-desc"></p>
+    </div>
+  </div>
+  <div class="hint">
+    <div class="hint-dot"></div>
+    Pasa el cursor o haz clic sobre cada marcador numerado para ver su descripción.
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.map-container').forEach(function(container) {
+    var tooltip = container.querySelector('.tooltip');
+    var titleEl = tooltip.querySelector('h3');
+    var descEl  = tooltip.querySelector('p');
+    var pinned  = false;
+    var pinnedHotspot = null;
+
+    function showTooltip(hotspot, x, y) {
+      titleEl.textContent = hotspot.dataset.title;
+      descEl.textContent  = hotspot.dataset.desc;
+      tooltip.classList.add('visible');
+      positionTooltip(x, y);
+    }
+
+    function positionTooltip(x, y) {
+      var cRect = container.getBoundingClientRect();
+      var tW = 230;
+      var tH = tooltip.offsetHeight || 120;
+      var left = x + 16;
+      var top  = y - 10;
+
+      if (left + tW > cRect.width) left = x - tW - 10;
+      if (top + tH > cRect.height) top = cRect.height - tH - 8;
+      if (top < 0) top = 8;
+
+      tooltip.style.left = left + 'px';
+      tooltip.style.top  = top  + 'px';
+    }
+
+    container.querySelectorAll('.hotspot').forEach(function(hs) {
+      hs.addEventListener('mouseenter', function(e) {
+        if (pinned) return;
+        var rect = container.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        showTooltip(hs, x, y);
+      });
+
+      hs.addEventListener('mousemove', function(e) {
+        if (pinned) return;
+        var rect = container.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        positionTooltip(x, y);
+      });
+
+      hs.addEventListener('mouseleave', function() {
+        if (!pinned) tooltip.classList.remove('visible');
+      });
+
+      hs.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (pinned && pinnedHotspot === hs) {
+          pinned = false;
+          pinnedHotspot = null;
+          hs.classList.remove('active');
+          tooltip.classList.remove('visible');
+        } else {
+          if (pinnedHotspot) pinnedHotspot.classList.remove('active');
+          pinned = true;
+          pinnedHotspot = hs;
+          hs.classList.add('active');
+          var rect = container.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          var y = e.clientY - rect.top;
+          showTooltip(hs, x, y);
+        }
+      });
+    });
+
+    container.addEventListener('click', function() {
+      if (pinned) {
+        pinned = false;
+        if (pinnedHotspot) pinnedHotspot.classList.remove('active');
+        pinnedHotspot = null;
+        tooltip.classList.remove('visible');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
