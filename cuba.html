@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Una isla a 145 km de Florida</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #presentation {
+      width: 90%;
+      max-width: 960px;
+      background: #16213e;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    #header {
+      background: #0f3460;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #header h1 { font-size: 1.1rem; font-weight: 600; color: #e94560; }
+    #slide-counter { font-size: 0.85rem; color: #aaa; }
+
+    /* ── Slide area ── */
+    #slide {
+      padding: 36px 40px;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #e94560;
+      margin-bottom: 20px;
+      border-left: 4px solid #e94560;
+      padding-left: 12px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .col-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #e94560;
+      margin-bottom: 8px;
+    }
+
+    .col-content {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #cdd;
+    }
+
+    .img-placeholder {
+      background: #0f3460;
+      border: 2px dashed #e94560;
+      border-radius: 8px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 12px;
+    }
+
+    /* ── Question slides ── */
+    .question-box {
+      background: #0f3460;
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .options-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .options-list li button {
+      width: 100%;
+      text-align: left;
+      background: #1a2a4a;
+      color: #cdd;
+      border: 2px solid #2a3a5a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .options-list li button:hover:not(:disabled) {
+      background: #243a6a;
+      border-color: #e94560;
+    }
+
+    .options-list li button.correct {
+      background: #0d4f2f;
+      border-color: #2ecc71;
+      color: #2ecc71;
+    }
+
+    .options-list li button.wrong {
+      background: #4f0d0d;
+      border-color: #e74c3c;
+      color: #e74c3c;
+    }
+
+    .options-list li button:disabled { cursor: default; }
+
+    #feedback {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #feedback.correct { background: #0d4f2f; color: #2ecc71; }
+    #feedback.wrong   { background: #4f0d0d; color: #e74c3c; }
+
+    /* ── Progress bar ── */
+    #progress-bar-wrap {
+      background: #0f3460;
+      height: 6px;
+    }
+    #progress-bar {
+      height: 6px;
+      background: #e94560;
+      transition: width 0.4s ease;
+    }
+
+    /* ── Navigation ── */
+    #nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 28px;
+      background: #0f3460;
+    }
+
+    #nav button {
+      background: #e94560;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #nav button:hover { background: #c73652; }
+    #nav button:disabled { background: #555; cursor: default; }
+
+    /* ── Final slide ── */
+    .final-slide {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .final-slide h2 { font-size: 2rem; color: #e94560; margin-bottom: 16px; }
+    .final-slide p  { font-size: 1rem; color: #aaa; line-height: 1.8; }
+    #score-display  { font-size: 1.5rem; margin: 24px 0; color: #2ecc71; }
+  </style>
+</head>
+<body>
+
+<div id="presentation">
+  <div id="header">
+    <h1>🇨🇺 Una isla a 145 km de Florida</h1>
+    <span id="slide-counter"></span>
+  </div>
+  <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+
+  <div id="slide"></div>
+
+  <div id="nav">
+    <button id="btn-prev" onclick="prevSlide()">← Anterior</button>
+    <button id="btn-next" onclick="nextSlide()">Siguiente →</button>
+  </div>
+</div>
+
+<script>
+const slides = [
+  {
+    type: "content",
+    title: "Antecedentes de la revolución",
+    text: `
+      <strong>1898:</strong> Independencia tardía de España con apoyo de Estados Unidos (Guerra Hispanoamericana).<br><br>
+      <strong>1901:</strong> Enmienda Platt — Derecho de EE. UU. de intervenir en los asuntos cubanos.<br><br>
+      <strong>1925–1933:</strong> Dictadura de Machado: Regeneración Nacional.<br><br>
+      <strong>1933:</strong> Golpe de Estado liderado por Fulgencio Batista y nombramiento de Ramón Grau San Martín.
+    `,
+    imgAlt: "Mapa Cuba – EE. UU."
+  },
+  {
+    type: "content",
+    title: "Ramón Grau: presidente provisional",
+    text: `
+      <strong>1933:</strong> Abolición de la Enmienda Platt, voto femenino, salario mínimo, trabajo para los nacidos en Cuba.<br><br>
+      <strong>1934:</strong> Reformas exigidas por el Partido Socialista y renuncia presidencial obligada por Fulgencio Batista.
+    `,
+    imgAlt: "Ramón Grau San Martín"
+  },
+  {
+    type: "content",
+    title: "Elecciones",
+    text: `
+      <strong>1933–1940:</strong> Alianza de Batista con el Partido Socialista y los sindicatos.<br><br>
+      Elección de <em>presidentes marioneta</em>: Carlos Hevia, Manuel Márquez Sterling, Carlos Mendieta, José A. Barnet y Federico Laredo Brú.<br><br>
+      <strong>1934:</strong> Constitución progresista — jornada de 8 horas, educación y justicia social.
+    `,
+    imgAlt: "Foto presidentes marioneta"
+  },
+  {
+    type: "content",
+    title: "Azúcar y política",
+    text: `
+      <strong>1940–1944:</strong> Batista fue elegido presidente. Fortalecimiento de la educación y las relaciones con EE. UU. Incremento en la exportación de azúcar.<br><br>
+      <strong>1944–1948:</strong> Grau fue elegido presidente por el Partido Revolucionario.<br><br>
+      EE. UU. controlaba el 40% de la producción de azúcar y el 50% del transporte ferroviario.<br>
+      El crimen organizado estadounidense y la corrupción prosperaron en la isla.
+    `,
+    imgAlt: "Plantaciones de azúcar"
+  },
+  {
+    type: "content",
+    title: "Dictadura de Batista",
+    text: `
+      <strong>1952:</strong> Batista retornó a la isla como candidato presidencial; después de las elecciones, dio un golpe de Estado y se nombró a sí mismo presidente provisional.<br><br>
+      La policía y el ejército suprimieron toda la oposición.
+    `,
+    imgAlt: "Fulgencio Batista"
+  },
+  {
+    type: "question",
+    title: "Pregunta 1",
+    question: "En la primera mitad del siglo XX, Estados Unidos intervino en Cuba a través de:",
+    options: [
+      "El control absoluto de la producción azucarera.",
+      "El crimen organizado que promovió el tráfico de drogas.",
+      "La Enmienda Platt.",
+      "La imposición de Fulgencio Batista como presidente provisional."
+    ],
+    correct: 2
+  },
+  {
+    type: "content",
+    title: "Fidel Castro y los revolucionarios",
+    text: `
+      Movimiento liderado por profesionales, intelectuales de clase media, ortodoxos radicales y personajes de la élite.<br><br>
+      <em>"Si Batista llegó al poder por la fuerza, debemos sacarlo por la fuerza."</em> — Fidel Castro<br><br>
+      Inspirados por el nacionalismo de José Martí, el heroísmo de Chibás y los revolucionarios independentistas.
+    `,
+    imgAlt: "Fidel Castro y colaboradores"
+  },
+  {
+    type: "question",
+    title: "Pregunta 2",
+    question: "Los líderes revolucionarios cubanos fueron:",
+    options: [
+      "Infiltrados soviéticos que llegaron a la isla en la década de los cincuenta.",
+      "Guerrilleros de toda Latinoamérica que llegaron a la isla en la década de los cuarenta.",
+      "Profesionales, intelectuales, sectores de la clase media y nacionalistas.",
+      "Militares cubanos inconformes."
+    ],
+    correct: 2
+  },
+  {
+    type: "content",
+    title: "Derrota inicial",
+    text: `
+      <strong>1953:</strong> Ataque revolucionario a la armada de Santiago — <em>Cuartel de Moncada</em>: 61 muertos y decenas de detenidos.<br><br>
+      Fidel Castro fue condenado a 15 años de prisión.<br><br>
+      <strong>1955:</strong> Amnistía para Castro y exilio en México. Creación del Movimiento 26 de Julio y alianza con Ernesto "Che" Guevara.
+    `,
+    imgAlt: "Cuartel Moncada"
+  },
+  {
+    type: "question",
+    title: "Pregunta 3",
+    question: "¿Cuál fue la importancia del ataque al cuartel de Moncada en 1953?",
+    options: [
+      "Fue un gran triunfo revolucionario.",
+      "Los revolucionarios consiguieron armas y municiones.",
+      "Los revolucionarios obtuvieron visibilidad pública.",
+      "Los revolucionarios tomaron como rehén a Batista."
+    ],
+    correct: 2
+  },
+  {
+    type: "content",
+    title: "La victoria revolucionaria",
+    text: `
+      <strong>1956:</strong> 82 rebeldes viajaron desde México en el <em>Granma</em>, fueron descubiertos y huyeron a la Sierra Maestra.<br><br>
+      <strong>1957:</strong> Entrevista en la Sierra Maestra e intento de tomar el Palacio Presidencial. Sangrienta persecución.<br><br>
+      Castro respondió con el manifiesto de 1957: elecciones, reforma agraria y alfabetización masiva.
+    `,
+    imgAlt: "Sierra Maestra – guerrilleros"
+  },
+  {
+    type: "content",
+    title: "El triunfo de la revolución",
+    text: `
+      <strong>1958:</strong> Apoyo comunista y bloqueo de La Habana. EE. UU. retiró su apoyo a Batista, quien convocó elecciones boicoteadas. Control revolucionario de Santiago.<br><br>
+      <strong>1959:</strong> El 1 de enero Batista renunció y huyó a República Dominicana con 424 millones de dólares de la reserva nacional. Dos días después, el Movimiento 26 de Julio tomó el control del país.
+    `,
+    imgAlt: "Entrada triunfal a La Habana"
+  },
+  {
+    type: "content",
+    title: "Para explorar",
+    text: `
+      Te invito a explorar con curiosidad la siguiente entrevista a Fidel Castro en el momento del triunfo de la revolución:<br><br>
+      <a href="https://www.youtube.com/results?search_query=fidel+castro+entrevista+1959+triunfo+revolucion"
+         target="_blank"
+         style="color:#e94560; text-decoration:underline;">
+        🎬 Buscar entrevista: Fidel Castro 1959 (YouTube)
+      </a>
+    `,
+    imgAlt: "Fidel Castro – entrevista 1959"
+  },
+  {
+    type: "content",
+    title: "Causas de la Revolución Cubana",
+    text: `
+      <strong>🔴 Económicas:</strong> Dependencia del monocultivo y el mercado externo, desempleo, subempleo, desigualdad extrema, poca inversión en la industria.<br><br>
+      <strong>🟡 Sociales:</strong> Demandas insatisfechas de la población urbana y la clase media, industriales y sindicatos, inequidad, crecimiento urbano y analfabetismo.<br><br>
+      <strong>🔵 Políticas:</strong> Vínculos de Batista con la corrupción y las mafias.
+    `,
+    imgAlt: "Diagrama causas revolución cubana"
+  },
+  {
+    type: "question",
+    title: "Pregunta 4",
+    question: "Son causas de la Revolución Cubana:",
+    options: [
+      "La intervención chino-soviética en la región.",
+      "Las demandas insatisfechas del pueblo cubano.",
+      "La intervención armada de los Estados Unidos.",
+      "La invasión de guerrillas centroamericanas."
+    ],
+    correct: 1
+  },
+  {
+    type: "final"
+  }
+];
+
+let current = 0;
+let answered = false;
+let score = 0;
+const totalQuestions = slides.filter(s => s.type === "question").length;
+
+function render() {
+  const s = slides[current];
+  const slideEl = document.getElementById("slide");
+  answered = false;
+
+  const pct = ((current) / (slides.length - 1)) * 100;
+  document.getElementById("progress-bar").style.width = pct + "%";
+  document.getElementById("slide-counter").textContent =
+    `Diapositiva ${current + 1} / ${slides.length}`;
+
+  document.getElementById("btn-prev").disabled = current === 0;
+  document.getElementById("btn-next").disabled =
+    (s.type === "question") || (current === slides.length - 1);
+
+  if (s.type === "content") {
+    slideEl.innerHTML = `
+      <div class="slide-title">${s.title}</div>
+      <div class="two-col">
+        <div>
+          <div class="col-label">Texto en pantalla</div>
+          <div class="col-content">${s.text}</div>
+        </div>
+        <div>
+          <div class="col-label">Idea gráfica</div>
+          <div class="img-placeholder">🖼 ${s.imgAlt}<br><small>(Insertar imagen aquí)</small></div>
+        </div>
+      </div>
+    `;
+  }
+
+  else if (s.type === "question") {
+    const optionsHTML = s.options.map((opt, i) =>
+      `<li><button onclick="checkAnswer(${i})">${i + 1}. ${opt}</button></li>`
+    ).join("");
+
+    slideEl.innerHTML = `
+      <div class="slide-title">${s.title}</div>
+      <div class="question-box">❓ ${s.question}</div>
+      <ul class="options-list">${optionsHTML}</ul>
+      <div id="feedback"></div>
+    `;
+  }
+
+  else if (s.type === "final") {
+    const pct = Math.round((score / totalQuestions) * 100);
+    slideEl.innerHTML = `
+      <div class="final-slide">
+        <h2>🎉 ¡Presentación completada!</h2>
+        <div id="score-display">Respuestas correctas: ${score} / ${totalQuestions} (${pct}%)</div>
+        <p>Has explorado los antecedentes, el desarrollo y las causas de la Revolución Cubana.<br>
+        Recuerda: la historia se construye con múltiples perspectivas. ¡Sigue investigando!</p>
+      </div>
+    `;
+    document.getElementById("btn-next").disabled = true;
+  }
+}
+
+function checkAnswer(index) {
+  if (answered) return;
+  answered = true;
+
+  const s = slides[current];
+  const buttons = document.querySelectorAll(".options-list li button");
+  const feedback = document.getElementById("feedback");
+
+  buttons.forEach(btn => btn.disabled = true);
+
+  if (index === s.correct) {
+    buttons[index].classList.add("correct");
+    feedback.textContent = "✅ ¡Correcto! Bien hecho.";
+    feedback.className = "correct";
+    score++;
+  } else {
+    buttons[index].classList.add("wrong");
+    buttons[s.correct].classList.add("correct");
+    feedback.textContent = `❌ No es correcto. La respuesta era: "${s.options[s.correct]}"`;
+    feedback.className = "wrong";
+  }
+
+  setTimeout(() => {
+    document.getElementById("btn-next").disabled = false;
+  }, 1500);
+}
+
+function nextSlide() {
+  if (current < slides.length - 1) { current++; render(); }
+}
+
+function prevSlide() {
+  if (current > 0) { current--; render(); }
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") nextSlide();
+  if (e.key === "ArrowLeft")  prevSlide();
+});
+
+render();
+</script>
+</body>
+</html>
