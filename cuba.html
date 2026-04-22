@@ -223,7 +223,8 @@ const slides = [
       <strong>1925–1933:</strong> Dictadura de Machado: Regeneración Nacional.<br><br>
       <strong>1933:</strong> Golpe de Estado liderado por Fulgencio Batista y nombramiento de Ramón Grau San Martín.
     `,
-    imgAlt: "Mapa Cuba – EE. UU."
+    imgAlt: "Mapa Cuba – EE. UU.",
+    img: "imge-Antecedentes de la revolución.jpg.png"
   },
   {
     type: "content",
@@ -232,7 +233,8 @@ const slides = [
       <strong>1933:</strong> Abolición de la Enmienda Platt, voto femenino, salario mínimo, trabajo para los nacidos en Cuba.<br><br>
       <strong>1934:</strong> Reformas exigidas por el Partido Socialista y renuncia presidencial obligada por Fulgencio Batista.
     `,
-    imgAlt: "Ramón Grau San Martín"
+    imgAlt: "Ramón Grau San Martín",
+    img: "imge-Ramón Grau.jpg.png"
   },
   {
     type: "content",
@@ -242,7 +244,8 @@ const slides = [
       Elección de <em>presidentes marioneta</em>: Carlos Hevia, Manuel Márquez Sterling, Carlos Mendieta, José A. Barnet y Federico Laredo Brú.<br><br>
       <strong>1934:</strong> Constitución progresista — jornada de 8 horas, educación y justicia social.
     `,
-    imgAlt: "Foto presidentes marioneta"
+    imgAlt: "Foto presidentes marioneta",
+    img: "imge-Elecciones.jpg.png"
   },
   {
     type: "content",
@@ -253,7 +256,8 @@ const slides = [
       EE. UU. controlaba el 40% de la producción de azúcar y el 50% del transporte ferroviario.<br>
       El crimen organizado estadounidense y la corrupción prosperaron en la isla.
     `,
-    imgAlt: "Plantaciones de azúcar"
+    imgAlt: "Plantaciones de azúcar",
+    img: "imge-Azúcar y política.jpg.jpeg"
   },
   {
     type: "content",
@@ -262,7 +266,8 @@ const slides = [
       <strong>1952:</strong> Batista retornó a la isla como candidato presidencial; después de las elecciones, dio un golpe de Estado y se nombró a sí mismo presidente provisional.<br><br>
       La policía y el ejército suprimieron toda la oposición.
     `,
-    imgAlt: "Fulgencio Batista"
+    imgAlt: "Fulgencio Batista",
+    img: "imge-Dictadura de Batista.jpg.jpeg"
   },
   {
     type: "question",
@@ -284,7 +289,8 @@ const slides = [
       <em>"Si Batista llegó al poder por la fuerza, debemos sacarlo por la fuerza."</em> — Fidel Castro<br><br>
       Inspirados por el nacionalismo de José Martí, el heroísmo de Chibás y los revolucionarios independentistas.
     `,
-    imgAlt: "Fidel Castro y colaboradores"
+    imgAlt: "Fidel Castro y colaboradores",
+    img: "imge-Fidel Castro y los Revolucionarios.jpg.png"
   },
   {
     type: "question",
@@ -306,7 +312,8 @@ const slides = [
       Fidel Castro fue condenado a 15 años de prisión.<br><br>
       <strong>1955:</strong> Amnistía para Castro y exilio en México. Creación del Movimiento 26 de Julio y alianza con Ernesto "Che" Guevara.
     `,
-    imgAlt: "Cuartel Moncada"
+    imgAlt: "Cuartel Moncada",
+    img: "imge-Derrota inicial.jpg.jpeg"
   },
   {
     type: "question",
@@ -328,7 +335,8 @@ const slides = [
       <strong>1957:</strong> Entrevista en la Sierra Maestra e intento de tomar el Palacio Presidencial. Sangrienta persecución.<br><br>
       Castro respondió con el manifiesto de 1957: elecciones, reforma agraria y alfabetización masiva.
     `,
-    imgAlt: "Sierra Maestra – guerrilleros"
+    imgAlt: "Sierra Maestra – guerrilleros",
+    img: "imge-La victoria revolucionaria.jpg.jpeg"
   },
   {
     type: "content",
@@ -337,7 +345,8 @@ const slides = [
       <strong>1958:</strong> Apoyo comunista y bloqueo de La Habana. EE. UU. retiró su apoyo a Batista, quien convocó elecciones boicoteadas. Control revolucionario de Santiago.<br><br>
       <strong>1959:</strong> El 1 de enero Batista renunció y huyó a República Dominicana con 424 millones de dólares de la reserva nacional. Dos días después, el Movimiento 26 de Julio tomó el control del país.
     `,
-    imgAlt: "Entrada triunfal a La Habana"
+    imgAlt: "Entrada triunfal a La Habana",
+    img: "imge-El triunfo de la revolución.jpg.jpeg"
   },
   {
     type: "content",
@@ -350,7 +359,8 @@ const slides = [
         🎬 Buscar entrevista: Fidel Castro 1959 (YouTube)
       </a>
     `,
-    imgAlt: "Fidel Castro – entrevista 1959"
+    imgAlt: "Fidel Castro – entrevista 1959",
+    img: "imge-Fidel Castro.jpg.jpeg"
   },
   {
     type: "content",
@@ -360,7 +370,8 @@ const slides = [
       <strong>🟡 Sociales:</strong> Demandas insatisfechas de la población urbana y la clase media, industriales y sindicatos, inequidad, crecimiento urbano y analfabetismo.<br><br>
       <strong>🔵 Políticas:</strong> Vínculos de Batista con la corrupción y las mafias.
     `,
-    imgAlt: "Diagrama causas revolución cubana"
+    imgAlt: "Diagrama causas revolución cubana",
+    img: "imge-Causas de la revolución cubana.jpg.jpeg"
   },
   {
     type: "question",
@@ -399,6 +410,9 @@ function render() {
     (s.type === "question") || (current === slides.length - 1);
 
   if (s.type === "content") {
+    const imgHTML = s.img
+      ? `<img src="${s.img}" alt="${s.imgAlt}" style="width:100%; border-radius:8px; object-fit:cover; max-height:220px; display:block;" />`
+      : `<div class="img-placeholder">🖼 ${s.imgAlt}<br><small>(Insertar imagen aquí)</small></div>`;
     slideEl.innerHTML = `
       <div class="slide-title">${s.title}</div>
       <div class="two-col">
@@ -407,8 +421,8 @@ function render() {
           <div class="col-content">${s.text}</div>
         </div>
         <div>
-          <div class="col-label">Idea gráfica</div>
-          <div class="img-placeholder">🖼 ${s.imgAlt}<br><small>(Insertar imagen aquí)</small></div>
+          <div class="col-label">Imagen</div>
+          ${imgHTML}
         </div>
       </div>
     `;
