@@ -411,7 +411,7 @@ function render() {
 
   if (s.type === "content") {
     const imgHTML = s.img
-      ? `<img src="${s.img}" alt="${s.imgAlt}" style="width:100%; border-radius:8px; object-fit:cover; max-height:220px; display:block;" />`
+      ? `<img src="${s.img}" alt="${s.imgAlt}" style="width:100%; border-radius:8px; object-fit:contain; max-height:220px; display:block; background:#0f3460;" />`
       : `<div class="img-placeholder">🖼 ${s.imgAlt}<br><small>(Insertar imagen aquí)</small></div>`;
     slideEl.innerHTML = `
       <div class="slide-title">${s.title}</div>
