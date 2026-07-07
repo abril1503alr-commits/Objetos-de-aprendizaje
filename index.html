@@ -290,6 +290,22 @@
 </div>
 
 <script>
+  // ── Calibración Vietnam ──
+  (function() {
+    var display = document.createElement('div');
+    display.style.cssText = 'position:fixed;top:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.88);color:#00ff88;font-family:monospace;font-size:15px;font-weight:bold;padding:8px 18px;border-radius:8px;z-index:99999;pointer-events:none;display:none;white-space:nowrap;';
+    document.body.appendChild(display);
+    var vietnamContainer = document.querySelectorAll('.map-container')[1];
+    vietnamContainer.addEventListener('mousemove', function(e) {
+      var rect = this.getBoundingClientRect();
+      var x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+      var y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1);
+      display.textContent = 'VIETNAM — left:' + x + '%  top:' + y + '%';
+      display.style.display = 'block';
+    });
+    vietnamContainer.addEventListener('mouseleave', function() { display.style.display = 'none'; });
+  })();
+
   document.querySelectorAll('.map-container').forEach(function(container) {
     var tooltip = container.querySelector('.tooltip');
     var titleEl = tooltip.querySelector('h3');
