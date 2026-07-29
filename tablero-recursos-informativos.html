@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tablero de opcionalidad: Recursos informativos</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f0;
+    color: #1a1a2e;
+    padding: 24px 16px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.45rem;
+    margin-bottom: 6px;
+    color: #2c2c2c;
+  }
+  .intro {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+    max-width: 720px;
+    margin: 0 auto 8px auto;
+    line-height: 1.6;
+  }
+  .intro strong { color: #2F6FED; }
+  .map-section {
+    max-width: 900px;
+    margin: 28px auto 40px auto;
+  }
+
+  /* ── Contenedor del tablero ── */
+  .map-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    border-radius: 10px;
+    overflow: visible;
+    box-shadow: 0 3px 18px rgba(0,0,0,0.14);
+  }
+  .map-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+  }
+
+  /* ── Hotspot (ícono Información) ── */
+  .hotspot {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: rgba(47, 111, 237, 0.9);
+    border: 2.5px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s, background 0.18s;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #fff;
+    user-select: none;
+  }
+  .hotspot:hover, .hotspot.active {
+    transform: translate(-50%, -50%) scale(1.35);
+    background: #1c4fc7;
+  }
+  .hotspot::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2px solid rgba(47,111,237,0.55);
+    transform: translate(-50%,-50%);
+    animation: pulse 2s ease-out infinite;
+  }
+  @keyframes pulse {
+    0%   { transform: translate(-50%,-50%) scale(1); opacity:0.75; }
+    100% { transform: translate(-50%,-50%) scale(2.6); opacity:0; }
+  }
+
+  /* ── Tooltip ── */
+  .tooltip {
+    display: none;
+    position: absolute;
+    z-index: 300;
+    background: #1e1e2e;
+    color: #f0f0f0;
+    padding: 14px 16px;
+    border-radius: 10px;
+    width: 300px;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.35);
+    pointer-events: none;
+    border-top: 3px solid #2F6FED;
+  }
+  .tooltip.visible { display: block; }
+  .tooltip h3 {
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+    color: #8fb4ff;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .tooltip .cuando {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #1e1e2e;
+    background: #d9e6ff;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  /* ── Instrucción ── */
+  .hint {
+    margin-top: 9px;
+    font-size: 0.8rem;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .hint-dot {
+    width: 12px; height: 12px;
+    background: #2F6FED;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .footer-note {
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: 0.78rem;
+    color: #999;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<h1>🧩 Recursos informativos de la Caja de herramientas</h1>
+<p class="intro">
+  Explora el tablero interactivo y revisa cada punto clave para reconocer los tipos de recursos
+  informativos que puedes integrar en una actividad o lección. Mientras avanzas, identifica
+  <strong>qué recurso se ajusta mejor al propósito pedagógico</strong> de un momento de tu secuencia
+  instruccional: explicar, guiar un procedimiento, sintetizar información, organizar una presentación
+  o entregar un material descargable.
+</p>
+
+<div class="map-section">
+  <div class="map-container" id="tablero">
+
+    <img src="tablero-recursos-informativos.svg"
+         alt="Tablero de herramientas didácticas con cinco recursos informativos"
+         id="img-tablero" />
+
+    <!-- ① Video explicativo -->
+    <div class="hotspot" style="left:20%; top:27%;"
+         data-title="1 · Video explicativo"
+         data-desc="Recurso audiovisual breve que presenta conceptos, procesos o fenómenos de manera clara, visual y ordenada. Es útil para introducir o reforzar ideas complejas antes de una actividad, un análisis o una aplicación. Debe ser breve, tener una narración directa, apoyarse en ejemplos o gráficos y acompañarse de una instrucción formativa que indique qué observar y cómo usar la información."
+         data-cuando="Úsalo para: explicar">
+      i
+    </div>
+
+    <!-- ② Video tutorial -->
+    <div class="hotspot" style="left:50%; top:27%;"
+         data-title="2 · Video tutorial"
+         data-desc="Recurso audiovisual que guía paso a paso la realización de una acción, como usar una herramienta, completar una actividad, navegar una plataforma o producir una evidencia. Es adecuado cuando el estudiante necesita pausar, repetir y verificar un procedimiento. Debe presentar una secuencia lógica, mostrar con claridad los elementos importantes y explicar cómo comprobar que la tarea fue realizada correctamente."
+         data-cuando="Úsalo para: guiar un procedimiento">
+      i
+    </div>
+
+    <!-- ③ Infografía -->
+    <div class="hotspot" style="left:80%; top:27%;"
+         data-title="3 · Infografía"
+         data-desc="Recurso visual que sintetiza información mediante texto breve, datos, íconos, imágenes, esquemas o relaciones gráficas. Sirve para comunicar ideas clave, comparaciones, procesos, clasificaciones o datos relevantes de forma rápida y clara. Debe priorizar la información esencial, mantener una jerarquía visual evidente y acompañarse de una instrucción que indique qué observar, comparar o recuperar."
+         data-cuando="Úsalo para: sintetizar información">
+      i
+    </div>
+
+    <!-- ④ Presentación multimedia -->
+    <div class="hotspot" style="left:35%; top:69%;"
+         data-title="4 · Presentación multimedia"
+         data-desc="Recurso secuenciado que organiza información mediante diapositivas, texto breve, imágenes, gráficos, audio, video o elementos interactivos simples. Ayuda a guiar la comprensión progresiva de un tema, destacar relaciones entre conceptos y preparar una actividad posterior. Debe evitar la saturación de texto, tener una estructura clara y usar apoyos visuales que faciliten la comprensión."
+         data-cuando="Úsalo para: organizar una presentación">
+      i
+    </div>
+
+    <!-- ⑤ PDF con diseño -->
+    <div class="hotspot" style="left:65%; top:69%;"
+         data-title="5 · PDF con diseño"
+         data-desc="Documento informativo maquetado para consulta, descarga o lectura guiada. Puede funcionar como guía, ficha conceptual, lectura breve, instructivo, material complementario o documento de profundización. Debe tener secciones claras, jerarquías visuales, lenguaje accesible, pausas para facilitar la lectura y referencias bibliográficas que respalden contenidos, imágenes o datos."
+         data-cuando="Úsalo para: entregar un material descargable">
+      i
+    </div>
+
+    <div class="tooltip" id="tooltip-tablero">
+      <h3 id="tooltip-tablero-title"></h3>
+      <p id="tooltip-tablero-desc"></p>
+      <span class="cuando" id="tooltip-tablero-cuando"></span>
+    </div>
+  </div>
+  <div class="hint">
+    <div class="hint-dot"></div>
+    Pasa el cursor o haz clic sobre cada punto de información para conocer el recurso.
+  </div>
+</div>
+
+<p class="footer-note">Plantilla H5P · Image Hotspots — Recursos informativos de la Caja de herramientas</p>
+
+<script>
+document.querySelectorAll('.map-container').forEach(function(container) {
+    var tooltip = container.querySelector('.tooltip');
+    var titleEl = tooltip.querySelector('h3');
+    var descEl  = tooltip.querySelector('p');
+    var cuandoEl = tooltip.querySelector('.cuando');
+    var pinned  = false;
+    var pinnedHotspot = null;
+
+    function showTooltip(hotspot, x, y) {
+      titleEl.textContent = hotspot.dataset.title;
+      descEl.textContent  = hotspot.dataset.desc;
+      cuandoEl.textContent = hotspot.dataset.cuando;
+      tooltip.classList.add('visible');
+      positionTooltip(x, y);
+    }
+
+    function positionTooltip(x, y) {
+      var cRect = container.getBoundingClientRect();
+      var tW = 300;
+      var tH = tooltip.offsetHeight || 150;
+      var left = x + 16;
+      var top  = y - 10;
+
+      if (left + tW > cRect.width) left = x - tW - 10;
+      if (top + tH > cRect.height) top = cRect.height - tH - 8;
+      if (top < 0) top = 8;
+
+      tooltip.style.left = left + 'px';
+      tooltip.style.top  = top  + 'px';
+    }
+
+    container.querySelectorAll('.hotspot').forEach(function(hs) {
+      hs.addEventListener('mouseenter', function(e) {
+        if (pinned) return;
+        var rect = container.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        showTooltip(hs, x, y);
+      });
+
+      hs.addEventListener('mousemove', function(e) {
+        if (pinned) return;
+        var rect = container.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        positionTooltip(x, y);
+      });
+
+      hs.addEventListener('mouseleave', function() {
+        if (!pinned) tooltip.classList.remove('visible');
+      });
+
+      hs.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (pinned && pinnedHotspot === hs) {
+          pinned = false;
+          pinnedHotspot = null;
+          hs.classList.remove('active');
+          tooltip.classList.remove('visible');
+        } else {
+          if (pinnedHotspot) pinnedHotspot.classList.remove('active');
+          pinned = true;
+          pinnedHotspot = hs;
+          hs.classList.add('active');
+          var rect = container.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          var y = e.clientY - rect.top;
+          showTooltip(hs, x, y);
+        }
+      });
+    });
+
+    container.addEventListener('click', function() {
+      if (pinned) {
+        pinned = false;
+        if (pinnedHotspot) pinnedHotspot.classList.remove('active');
+        pinnedHotspot = null;
+        tooltip.classList.remove('visible');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
