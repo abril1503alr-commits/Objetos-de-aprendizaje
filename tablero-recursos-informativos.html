@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tablero de opcionalidad: Recursos informativos</title>
+<title>Caja de herramientas: recursos informativos</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -17,6 +17,15 @@
     font-size: 1.45rem;
     margin-bottom: 6px;
     color: #2c2c2c;
+  }
+  .brand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .brand-logo {
+    height: 40px;
+    width: auto;
   }
   .intro {
     text-align: center;
@@ -160,12 +169,24 @@
     color: #999;
     text-align: center;
     padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-note img {
+    height: 22px;
+    width: auto;
+    opacity: 0.85;
   }
 </style>
 </head>
 <body>
 
-<h1>🧩 Recursos informativos de la Caja de herramientas</h1>
+<div class="brand">
+  <img src="recursos-icons/logo-signa-learning.png" alt="Signa Learning" class="brand-logo" />
+</div>
+<h1>Caja de herramientas: recursos informativos</h1>
 <p class="intro">
   Explora el tablero interactivo y revisa cada punto clave para reconocer los tipos de recursos
   informativos que puedes integrar en una actividad o lección. Mientras avanzas, identifica
@@ -239,7 +260,10 @@
   </div>
 </div>
 
-<p class="footer-note">Plantilla H5P · Image Hotspots — Recursos informativos de la Caja de herramientas</p>
+<p class="footer-note">
+  <img src="recursos-icons/logo-signa-learning.png" alt="Signa Learning" />
+  Plantilla H5P · Image Hotspots — Recursos informativos de la Caja de herramientas
+</p>
 
 <script>
 document.querySelectorAll('.map-container').forEach(function(container) {
