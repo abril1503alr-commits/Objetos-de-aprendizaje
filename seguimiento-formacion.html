@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root{
     --ink:         #3C4043;
@@ -539,6 +540,36 @@
     align-items:center;
     gap:7px;
   }
+  .reflect-actions{
+    margin-top:18px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .btn-download{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,0.12);
+    border:1.5px solid rgba(255,255,255,0.55);
+    color:var(--white);
+    font-family:'Poppins',sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    padding:10px 20px;
+    border-radius:100px;
+    cursor:pointer;
+    transition:background .2s, border-color .2s, transform .15s;
+  }
+  .btn-download:hover{background:rgba(255,255,255,0.24); border-color:var(--white); transform:translateY(-1px);}
+  .pdf-status{
+    font-size:0.8rem;
+    color:var(--white);
+    opacity:0;
+    transition:opacity .25s ease;
+  }
+  .pdf-status.show{opacity:1;}
 
   /* ── Barra de navegación inferior ── */
   .navbar{
@@ -889,6 +920,10 @@
       <div class="reflect-box">
         <textarea class="reflect" id="reflectArea" placeholder="Escribe aquí tu respuesta…"></textarea>
         <p class="reflect-note">✎ Este espacio no se evalúa ni se envía — es solo para ti, antes de seguir con el resto de la unidad.</p>
+        <div class="reflect-actions">
+          <button class="btn-download" onclick="downloadReflectionPDF()">⬇ Descargar como PDF</button>
+          <p class="pdf-status" id="pdfStatus" aria-live="polite"></p>
+        </div>
       </div>
     </section>
 
@@ -985,6 +1020,81 @@
       localStorage.setItem('reflexion-seguimiento-formacion', reflectArea.value);
     });
   } catch(e) {}
+
+  /* Descarga de la reflexión como PDF — slide 8 */
+  function showPdfStatus(message) {
+    var statusEl = document.getElementById('pdfStatus');
+    statusEl.textContent = message;
+    statusEl.classList.add('show');
+    clearTimeout(showPdfStatus._t);
+    showPdfStatus._t = setTimeout(function(){ statusEl.classList.remove('show'); }, 3500);
+  }
+
+  function downloadReflectionPDF() {
+    var text = reflectArea.value.trim();
+    if (!text) {
+      showPdfStatus('Escribe tu reflexión antes de descargarla.');
+      return;
+    }
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      showPdfStatus('No se pudo generar el PDF — revisa tu conexión e inténtalo de nuevo.');
+      return;
+    }
+
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF({ unit: 'pt', format: 'letter' });
+    var marginX = 56;
+    var pageWidth = doc.internal.pageSize.getWidth();
+    var pageHeight = doc.internal.pageSize.getHeight();
+    var maxWidth = pageWidth - marginX * 2;
+    var y = 64;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(17);
+    doc.setTextColor(60, 64, 67);
+    doc.text('Tu espacio de reflexión', marginX, y);
+
+    y += 20;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10.5);
+    doc.setTextColor(85, 117, 132);
+    doc.text('Unidad 3 · Momento 3.1 — El seguimiento a la formación', marginX, y);
+
+    y += 14;
+    var dateStr = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+    doc.text(dateStr, marginX, y);
+
+    y += 20;
+    doc.setDrawColor(220, 228, 232);
+    doc.setLineWidth(1);
+    doc.line(marginX, y, pageWidth - marginX, y);
+
+    y += 26;
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(10.5);
+    doc.setTextColor(95, 99, 104);
+    var question = '¿Cómo cruzarías la información de estos tres instrumentos para construir un diagnóstico completo de una acción formativa? Y si los datos entre ellos fueran contradictorios —por ejemplo, alta satisfacción en la encuesta pero deficiencias en la observación—, ¿qué decisión tomarías?';
+    var qLines = doc.splitTextToSize(question, maxWidth);
+    doc.text(qLines, marginX, y);
+    y += qLines.length * 14 + 22;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.setTextColor(60, 64, 67);
+    var lines = doc.splitTextToSize(text, maxWidth);
+    var lineHeight = 17;
+    for (var i = 0; i < lines.length; i++) {
+      if (y > pageHeight - 60) {
+        doc.addPage();
+        y = 64;
+      }
+      doc.text(lines[i], marginX, y);
+      y += lineHeight;
+    }
+
+    doc.save('reflexion-seguimiento-formacion.pdf');
+    showPdfStatus('PDF descargado ✓');
+  }
 
   updateChrome();
 </script>
