@@ -442,26 +442,45 @@
     align-items:center;
     margin-top:18px;
   }
-  #venn-svg{
+  .venn-image-wrap{
+    position:relative;
     width:100%;
     max-width:380px;
+    margin:0 auto;
+  }
+  .venn-image{
+    width:100%;
     height:auto;
     display:block;
-    filter:drop-shadow(0 10px 22px rgba(60,64,67,0.22));
   }
-  .venn-center-hit{cursor:pointer;}
-  .venn-pulse{
-    transform-box:fill-box;
-    transform-origin:center;
+  .venn-hotspot{
+    position:absolute;
+    left:49.6%;
+    top:49.6%;
+    width:11%;
+    height:11%;
+    transform:translate(-50%,-50%);
+    background:transparent;
+    border:none;
+    border-radius:50%;
+    padding:0;
+    cursor:pointer;
+  }
+  .venn-hotspot::after{
+    content:'';
+    position:absolute;
+    inset:-8px;
+    border-radius:50%;
+    border:2px solid var(--accent-bright);
     animation:vennPulse 2.4s ease-out infinite;
     pointer-events:none;
   }
   @keyframes vennPulse{
-    0%{transform:scale(1); opacity:0.5;}
-    100%{transform:scale(1.9); opacity:0;}
+    0%{transform:scale(1); opacity:0.6;}
+    100%{transform:scale(1.6); opacity:0;}
   }
   @media (prefers-reduced-motion: reduce){
-    .venn-pulse{animation:none; opacity:0;}
+    .venn-hotspot::after{animation:none; opacity:0;}
   }
   .venn-conclusion{
     margin-top:22px;
@@ -837,53 +856,10 @@
       </p>
 
       <div class="venn-wrap">
-        <svg width="360" height="300" viewBox="0 0 360 300" id="venn-svg">
-          <defs>
-            <filter id="labelShadow" x="-40%" y="-40%" width="180%" height="180%">
-              <feDropShadow dx="0" dy="1.5" stdDeviation="1.3" flood-color="#2A3A42" flood-opacity="0.45"/>
-            </filter>
-          </defs>
-
-          <g style="isolation:isolate;">
-            <circle cx="130" cy="120" r="82" fill="#6E90A5" style="mix-blend-mode:multiply"/>
-            <circle cx="230" cy="120" r="82" fill="#CF8833" style="mix-blend-mode:multiply"/>
-            <circle cx="180" cy="205" r="82" fill="#6E90A5" style="mix-blend-mode:multiply"/>
-          </g>
-
-          <!-- Encuesta: portapapeles -->
-          <g transform="translate(95,58)" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="-11" y="-13" width="22" height="28" rx="3"/>
-            <rect x="-5" y="-16" width="10" height="5" rx="1.5" fill="#FFFFFF"/>
-            <line x1="-6" y1="-2" x2="6" y2="-2"/>
-            <line x1="-6" y1="4" x2="6" y2="4"/>
-            <line x1="-6" y1="10" x2="2" y2="10"/>
-          </g>
-          <text x="95" y="107" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" filter="url(#labelShadow)">Encuesta</text>
-
-          <!-- Observación: ojo -->
-          <g transform="translate(265,58)" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M-14,0 C-10,-9 10,-9 14,0 C10,9 -10,9 -14,0 Z"/>
-            <circle cx="0" cy="0" r="3.2" fill="#FFFFFF" stroke="none"/>
-          </g>
-          <text x="265" y="107" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" filter="url(#labelShadow)">Observación</text>
-
-          <!-- Autoevaluación: ciclo de revisión -->
-          <g transform="translate(180,232)" stroke="#FFFFFF" stroke-width="2.1" fill="none" stroke-linecap="round">
-            <path d="M9,-10 A13,13 0 1 1 -9,-10"/>
-            <path d="M9,-10 L11.5,-3 M9,-10 L2,-9.5" stroke-linejoin="round"/>
-          </g>
-          <text x="180" y="278" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" filter="url(#labelShadow)">Autoevaluación</text>
-
-          <circle class="venn-pulse" cx="180" cy="148" r="22" fill="none" stroke="#E8A94F" stroke-width="2"/>
-
-          <g class="venn-center-hit" onclick="revealVenn()" onmouseenter="revealVenn()">
-            <circle cx="180" cy="148" r="22" fill="#3C4043" stroke="#CF8833" stroke-width="4.5"/>
-            <path d="M180,138.5c-4.7,0-8.5,3.7-8.5,8.4 0,3.2 1.6,5.1 3,6.6 1,1.1 1.7,1.9 1.7,3h7.6c0-1.1.7-1.9 1.7-3 1.4-1.5 3-3.4 3-6.6 0-4.7-3.8-8.4-8.5-8.4z"
-                fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"/>
-            <line x1="176.2" y1="159.5" x2="183.8" y2="159.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
-            <line x1="177.3" y1="162.5" x2="182.7" y2="162.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
-          </g>
-        </svg>
+        <div class="venn-image-wrap">
+          <img class="venn-image" src="diagrama_triangulacion_metodologica.png" alt="Diagrama de Venn con tres círculos: Encuesta, Observación y Autoevaluación, superpuestos alrededor de un ícono central de foco que representa la conclusión." />
+          <button class="venn-hotspot" onclick="revealVenn()" onmouseenter="revealVenn()" aria-label="Descubrir la conclusión"></button>
+        </div>
       </div>
 
       <div class="venn-conclusion" id="venn-conclusion">
