@@ -197,6 +197,12 @@
     color: #314783;
     margin-bottom: 10px;
   }
+  .reflect-intro {
+    font-size: 0.88rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
   .reflect-question {
     font-size: 0.94rem;
     color: #2a2530;
@@ -219,6 +225,36 @@
     outline: none;
     border-color: #695285;
   }
+  .reflect-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .download-btn {
+    font-family: inherit;
+    font-size: 0.86rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 9px;
+    padding: 11px 18px;
+    background: linear-gradient(135deg, #695285, #314783);
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .download-btn:hover { opacity: 0.92; }
+  .download-btn:active { transform: scale(0.98); }
+  .download-status {
+    font-size: 0.8rem;
+    color: #999;
+  }
+  .download-status.status-error { color: #a15b3a; }
+  .download-status.status-ok { color: #3a7a55; }
   .reflect-note {
     font-size: 0.76rem;
     color: #999;
@@ -281,12 +317,21 @@
   <div class="checklist" id="checklist"></div>
 
   <div class="reflect-section">
-    <h2>Antes de cerrar</h2>
+    <h2>Tu compromiso antes de la Unidad 4</h2>
+    <p class="reflect-intro">
+      Este es el momento de convertir lo que identificaste en un acuerdo contigo mismo/a: no se trata
+      solo de reflexionar, sino de dejar por escrito a qué te comprometes a trabajar antes de empezar
+      la Unidad 4. Escribe tu respuesta y, si quieres, descárgala en PDF como recordatorio personal.
+    </p>
     <p class="reflect-question">
       "De todo lo anterior, ¿qué es lo que más necesitas resolver antes de continuar a la Unidad 4?"
     </p>
-    <textarea class="reflect-input" placeholder="Escribe aquí tu reflexión (opcional)..."></textarea>
-    <p class="reflect-note">Este campo es solo para tu reflexión personal: no se guarda ni se envía a ningún lado.</p>
+    <textarea class="reflect-input" id="reflect-input" placeholder="Escribe aquí tu compromiso..."></textarea>
+    <div class="reflect-actions">
+      <button class="download-btn" id="download-btn">📄 Descargar mi compromiso en PDF</button>
+      <span class="download-status" id="download-status"></span>
+    </div>
+    <p class="reflect-note">Este campo no se califica ni se envía a ningún lado: es solo para ti. El PDF se genera y se guarda directamente en tu dispositivo.</p>
   </div>
 
   <div class="closing-message">
@@ -299,6 +344,7 @@
   </p>
 </div>
 
+<script src="vendor/jspdf.umd.min.js"></script>
 <script>
 const ITEMS = [
   "Cuento con una propuesta de actividades de aprendizaje que incluye al menos 3 actividades.",
@@ -361,6 +407,127 @@ listEl.addEventListener('click', (e) => {
   btn.classList.add('active');
 
   updateProgress();
+});
+
+const downloadBtn = document.getElementById('download-btn');
+const downloadStatus = document.getElementById('download-status');
+const reflectInput = document.getElementById('reflect-input');
+
+function setStatus(text, kind) {
+  downloadStatus.textContent = text;
+  downloadStatus.className = 'download-status' + (kind ? ` status-${kind}` : '');
+}
+
+downloadBtn.addEventListener('click', () => {
+  const text = reflectInput.value.trim();
+  if (!text) {
+    setStatus('Escribe tu compromiso antes de descargarlo.', 'error');
+    reflectInput.focus();
+    return;
+  }
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    setStatus('No se pudo cargar el generador de PDF. Intenta recargar la página.', 'error');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+  const marginX = 56;
+  let y = 72;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const maxWidth = pageWidth - marginX * 2;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(105, 82, 133);
+  doc.text('DISEÑA CON INTENCIÓN · UNIDAD 3 · MOMENTO 3.7', marginX, y);
+  y += 22;
+
+  doc.setFontSize(18);
+  doc.setTextColor(49, 71, 131);
+  doc.text('Mi compromiso para la Unidad 4', marginX, y);
+  y += 26;
+
+  doc.setDrawColor(202, 223, 233);
+  doc.setLineWidth(1.2);
+  doc.line(marginX, y, pageWidth - marginX, y);
+  y += 26;
+
+  const resueltos = state.filter(s => s === 'resuelto').length;
+  const pendientes = ITEMS.map((t, i) => ({ t, i }))
+    .filter(({ i }) => state[i] !== 'resuelto');
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10.5);
+  doc.setTextColor(40, 40, 46);
+  doc.text(`Avance del checklist: ${resueltos} de ${ITEMS.length} enunciados resueltos.`, marginX, y);
+  y += 26;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(49, 71, 131);
+  doc.text('Pendientes identificados', marginX, y);
+  y += 18;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10.5);
+  doc.setTextColor(40, 40, 46);
+  if (pendientes.length === 0) {
+    doc.text('No marcaste enunciados como pendientes. ¡Vas listo/a para la Unidad 4!', marginX, y);
+    y += 18;
+  } else {
+    pendientes.forEach(({ t, i }) => {
+      const lines = doc.splitTextToSize(`${i + 1}. ${t}`, maxWidth - 14);
+      doc.text(lines, marginX + 14, y);
+      y += lines.length * 14 + 6;
+    });
+  }
+  y += 14;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(49, 71, 131);
+  doc.text('Mi reflexión y compromiso', marginX, y);
+  y += 18;
+
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(10);
+  doc.setTextColor(90, 90, 98);
+  const qLines = doc.splitTextToSize(
+    '"De todo lo anterior, ¿qué es lo que más necesitas resolver antes de continuar a la Unidad 4?"',
+    maxWidth
+  );
+  doc.text(qLines, marginX, y);
+  y += qLines.length * 13 + 12;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(30, 30, 36);
+  const answerLines = doc.splitTextToSize(text, maxWidth);
+  const pageHeight = doc.internal.pageSize.getHeight();
+  answerLines.forEach(line => {
+    if (y > pageHeight - 60) {
+      doc.addPage();
+      y = 72;
+    }
+    doc.text(line, marginX, y);
+    y += 16;
+  });
+
+  y += 20;
+  if (y > pageHeight - 80) { doc.addPage(); y = 72; }
+  doc.setDrawColor(202, 223, 233);
+  doc.line(marginX, y, pageWidth - marginX, y);
+  y += 20;
+
+  const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(9);
+  doc.setTextColor(140, 140, 150);
+  doc.text(`Compromiso registrado el ${today} · Checklist de autoevaluación, Unidad 3`, marginX, y);
+
+  doc.save('mi-compromiso-unidad-4.pdf');
+  setStatus('PDF descargado con éxito.', 'ok');
 });
 </script>
 
