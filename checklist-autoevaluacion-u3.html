@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Checklist de autoevaluación — Unidad 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f0;
+    color: #1a1a2e;
+    padding: 24px 16px 48px;
+  }
+
+  .brand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .brand-logo { height: 56px; width: auto; }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #695285;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #314783;
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+
+  .intro {
+    text-align: center;
+    font-size: 0.92rem;
+    color: #555;
+    line-height: 1.65;
+    max-width: 620px;
+    margin: 0 auto 32px auto;
+  }
+  .intro strong { color: #695285; }
+
+  /* ── Progreso ── */
+  .progress-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #f4f4f0;
+    padding: 10px 0 16px;
+    margin-bottom: 8px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #314783;
+    margin-bottom: 6px;
+  }
+  .progress-label span.count { color: #695285; }
+  .progress-track {
+    width: 100%;
+    height: 8px;
+    background: #e6e6ea;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #695285, #314783);
+    border-radius: 6px;
+    transition: width 0.3s ease;
+  }
+
+  /* ── Items ── */
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .item-card {
+    background: #fff;
+    border: 1.5px solid #e4e0da;
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .item-card.state-resuelto {
+    border-color: #CADFE9;
+    box-shadow: 0 2px 10px rgba(105,82,133,0.08);
+  }
+  .item-card.state-revisar {
+    border-color: #d3d3d8;
+  }
+
+  .item-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .item-number {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f2f0ec;
+    color: #695285;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .item-card.state-resuelto .item-number {
+    background: #CADFE9;
+    color: #314783;
+  }
+  .item-card.state-revisar .item-number {
+    background: #e2e2e6;
+    color: #5a5a63;
+  }
+  .item-text {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: #2a2530;
+    padding-top: 2px;
+  }
+
+  .item-actions {
+    display: flex;
+    gap: 10px;
+    padding-left: 38px;
+    flex-wrap: wrap;
+  }
+  .state-btn {
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 9px 14px;
+    border: 1.5px solid #e4e0da;
+    background: #fbfaf8;
+    color: #55505c;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .state-btn:hover { border-color: #b8aec6; }
+
+  .state-btn.btn-resuelto.active {
+    background: #CADFE9;
+    border-color: #9dc0d8;
+    color: #22405a;
+  }
+  .state-btn.btn-revisar.active {
+    background: #e2e2e6;
+    border-color: #b7b7bf;
+    color: #43434a;
+  }
+
+  /* ── Reflexión ── */
+  .reflect-section {
+    background: #fff;
+    border: 1.5px solid #e4e0da;
+    border-radius: 14px;
+    padding: 24px 22px;
+    margin-bottom: 24px;
+  }
+  .reflect-section h2 {
+    font-size: 1.05rem;
+    color: #314783;
+    margin-bottom: 10px;
+  }
+  .reflect-question {
+    font-size: 0.94rem;
+    color: #2a2530;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+  textarea.reflect-input {
+    width: 100%;
+    min-height: 110px;
+    border: 1.5px solid #e4e0da;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: #2a2530;
+    resize: vertical;
+  }
+  textarea.reflect-input:focus {
+    outline: none;
+    border-color: #695285;
+  }
+  .reflect-note {
+    font-size: 0.76rem;
+    color: #999;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* ── Cierre ── */
+  .closing-message {
+    background: linear-gradient(135deg, #695285, #314783);
+    color: #fff;
+    border-radius: 14px;
+    padding: 26px 24px;
+    text-align: center;
+  }
+  .closing-message p {
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .footer-note {
+    max-width: 900px;
+    margin: 36px auto 0;
+    font-size: 0.78rem;
+    color: #999;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-note img { height: 22px; width: auto; opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <img src="recursos-icons/logo-signa-learning.png" alt="Signa Learning" class="brand-logo" />
+</div>
+
+<div class="page">
+  <p class="eyebrow">Diseña con intención · Unidad 3 · Momento 3.7 · Para recapitular</p>
+  <h1>Checklist de autoevaluación</h1>
+  <p class="intro">
+    Marca, enunciado por enunciado, si tienes ese elemento <strong>resuelto</strong> o si
+    <strong>necesitas revisarlo</strong> antes de avanzar a la Unidad 4. No se califica ni se envía
+    a ningún lado — es de uso personal.
+  </p>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Tu avance</span>
+      <span><span class="count" id="progress-count">0</span> de 13 resueltos</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <div class="checklist" id="checklist"></div>
+
+  <div class="reflect-section">
+    <h2>Antes de cerrar</h2>
+    <p class="reflect-question">
+      "De todo lo anterior, ¿qué es lo que más necesitas resolver antes de continuar a la Unidad 4?"
+    </p>
+    <textarea class="reflect-input" placeholder="Escribe aquí tu reflexión (opcional)..."></textarea>
+    <p class="reflect-note">Este campo es solo para tu reflexión personal: no se guarda ni se envía a ningún lado.</p>
+  </div>
+
+  <div class="closing-message">
+    <p>Este es tu punto de partida para la Unidad 4. Lo que hayas marcado como pendiente, tómalo como tu propia lista de tareas antes de continuar.</p>
+  </div>
+
+  <p class="footer-note">
+    <img src="recursos-icons/logo-signa-learning.png" alt="Signa Learning" />
+    Checklist interactivo de autoevaluación — Unidad 3 · Momento 3.7
+  </p>
+</div>
+
+<script>
+const ITEMS = [
+  "Cuento con una propuesta de actividades de aprendizaje que incluye al menos 3 actividades.",
+  "Esa propuesta ya está ajustada para vivir en un ambiente virtual o híbrido, aplicando los criterios de virtualización que revisé en la Unidad 1.",
+  "Tengo definido el objetivo o propósito de la unidad o módulo de mi acción formativa.",
+  "Cada una de mis actividades tiene una meta de aprendizaje clara y redactada.",
+  "Para cada actividad, tengo al menos una idea general de qué van a hacer los participantes — aunque sea a nivel de propuesta, no de guion detallado todavía.",
+  "Tengo terminado mi recurso informativo, con el tratamiento comunicativo cuidado.",
+  "Tengo integrado el REA que seleccioné, con la explicación de en qué momento se usa.",
+  "Elegí mi recurso interactivo o ejercicio autocalificable con base en el propósito didáctico del momento, no por preferencia personal.",
+  "Mi guion cuida el tratamiento comunicativo y el hilo narrativo trabajados desde la Unidad 1.",
+  "Mi instrumento de evaluación tiene criterios redactados con claridad, no genéricos.",
+  "Puedo explicar qué distingue a un recurso interactivo de uno que solo se consulta.",
+  "Sé que el nivel cognitivo de un reactivo lo determina su redacción, no el formato que elijo.",
+  "Sé distinguir un criterio de evaluación bien redactado de uno vago."
+];
+
+const state = new Array(ITEMS.length).fill(null);
+
+const listEl = document.getElementById('checklist');
+
+ITEMS.forEach((text, i) => {
+  const card = document.createElement('div');
+  card.className = 'item-card';
+  card.id = `item-${i}`;
+
+  card.innerHTML = `
+    <div class="item-row">
+      <div class="item-number">${i + 1}</div>
+      <div class="item-text">${text}</div>
+    </div>
+    <div class="item-actions">
+      <button class="state-btn btn-resuelto" data-index="${i}" data-state="resuelto">✅ Lo tengo claro / resuelto</button>
+      <button class="state-btn btn-revisar" data-index="${i}" data-state="revisar">🔄 Necesito revisarlo antes de la Unidad 4</button>
+    </div>
+  `;
+  listEl.appendChild(card);
+});
+
+function updateProgress() {
+  const resueltos = state.filter(s => s === 'resuelto').length;
+  document.getElementById('progress-count').textContent = resueltos;
+  document.getElementById('progress-fill').style.width = `${(resueltos / ITEMS.length) * 100}%`;
+}
+
+listEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('.state-btn');
+  if (!btn) return;
+  const i = parseInt(btn.dataset.index, 10);
+  const chosen = btn.dataset.state;
+
+  state[i] = chosen;
+
+  const card = document.getElementById(`item-${i}`);
+  card.classList.remove('state-resuelto', 'state-revisar');
+  card.classList.add(`state-${chosen}`);
+
+  const buttons = card.querySelectorAll('.state-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  updateProgress();
+});
+</script>
+
+</body>
+</html>
